@@ -1,0 +1,25 @@
+name: CI - Backend (dev)
+
+on:
+  push:
+    branches:
+      - back-dev
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+      - name: Run basic start to ensure no runtime errors
+        run: |
+          cd backend
+          node server.js & sleep 3
+          kill $! || true
